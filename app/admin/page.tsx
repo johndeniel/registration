@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { logout } from '@/server/action/logout'
 
-export default function HomeDashboard() {
+export default function AdminPage() {
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
 
