@@ -48,8 +48,8 @@ export default function AdminPage() {
             <div className="flex items-center space-x-6">
               <div className="relative">
                 <Image
-                  src={`/logo.png`}
-                  alt={`Admin`}
+                  src={'/logo.png'}
+                  alt={'Admin'}
                   width={52}
                   height={52}
                   className="rounded-full border-2 border-gray-200 shadow-[0_0_10px_rgba(0,0,0,0.1)]"
@@ -81,7 +81,7 @@ export default function AdminPage() {
                   >
                     <div className="relative">
                       <Image
-                        src={`/placeholder-user.jpg`}
+                        src={'/placeholder-user.jpg'}
                         width={42}
                         height={42}
                         alt="User Avatar"
