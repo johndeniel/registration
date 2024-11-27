@@ -29,7 +29,7 @@ const passwordValidation = z.string()
 const accountSchema = z.object({
   oldPassword: z.string().min(1, 'Current password is required'),
   username: z.string()
-    .min(4, 'Username must be at least 4 characters')
+    .min(6, 'Username must be at least 6 characters')
     .max(20, 'Username cannot exceed 20 characters')
     .regex(/^[a-zA-Z0-9_]+$/, 'Username can only contain letters, numbers, and underscores'),
   password: passwordValidation,
