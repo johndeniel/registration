@@ -1,46 +1,60 @@
-import { type NextRequest } from 'next/server';
-import { APIResponse } from '@/lib/api-res-helper';
-import { APIErrHandler } from '@/lib/api-err-handler';
-import { APILogger } from '@/lib/api-req-logger';
-import { Query } from '@/lib/postgres';
-import { hashPassword, comparePassword } from '@/lib/password-hash';
+import { type NextRequest } from 'next/server'
+import { APIResponse } from '@/lib/api-res-helper'
+import { APIErrHandler } from '@/lib/api-err-handler'
+import { APILogger } from '@/lib/api-req-logger'
+import { Query } from '@/lib/postgres'
+import { hashPassword, comparePassword } from '@/lib/password-hash'
+import { QueryResultRow } from 'pg'
 
 export async function PUT(request: NextRequest) {
   try {
-    // Log the incoming request and parameters
-    APILogger(request, null);
+    APILogger(request, null)
 
-    // Parse the request body
-    const body = await request.json();
+    const body = await request.json()
 
-    // Extract data from request body
-    const { newusername, newpassword, oldpassword } = body;
+    const { newusername, newpassword, oldpassword } = body
 
-    // Validate required fields
     if (!newusername || !newpassword || !oldpassword) {
-      return APIResponse({ error: 'All required parameters are needed' }, 400);
+      return APIResponse({ error: 'All required parameters are needed' }, 400)
     }
 
-    // Update the username and password in the auth table
-    const updateResult = await Query({
+    // Explicitly type the query result
+    const userResult: QueryResultRow[] = await Query({
+      query: 'SELECT password FROM auth WHERE id = $1',
+      values: [1]
+    })
+
+    // Check if user exists using length property directly on array
+    if (userResult.length === 0) {
+      return APIResponse({ error: 'User not found' }, 404)
+    }
+
+    const isPasswordValid = await comparePassword(oldpassword, userResult[0].password)
+
+    if (!isPasswordValid) {
+      return APIResponse({ error: 'Current password is incorrect' }, 401)
+    }
+
+    const hashedNewPassword = await hashPassword(newpassword)
+
+    await Query({
       query: `
         UPDATE auth
         SET username = $1,
             password = $2
-        WHERE password = $3
       `,
-      values: [newusername, newpassword, oldpassword],
-    });
+      values: [newusername, hashedNewPassword]
+    })
 
-    return APIResponse({ message: 'Username and password updated successfully' }, 200);
+    return APIResponse({ message: 'Username and password updated successfully' }, 200)
   } catch (error: any) {
-    console.error('Database query failed:', error);
+    console.error('Update operation failed:', error)
 
-    const apiError = APIErrHandler(error);
+    const apiError = APIErrHandler(error)
     if (apiError) {
-      return apiError;
+      return apiError
     }
 
-    return APIResponse({ error: 'Internal server error' }, 500);
+    return APIResponse({ error: 'Internal server error' }, 500)
   }
 }
