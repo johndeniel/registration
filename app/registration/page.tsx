@@ -416,38 +416,6 @@ export default function ProfessionalRegistrationForm() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                   <FormField
                     control={form.control}
-                    name="barangay"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="font-semibold text-sm text-neutral-700 uppercase tracking-wider">Barangay</FormLabel>
-                        <Select 
-                          onValueChange={field.onChange} 
-                          defaultValue={field.value}
-                          required
-                        >
-                          <FormControl>
-                            <SelectTrigger className="border-neutral-300 focus:border-neutral-500">
-                              <SelectValue placeholder="Select Barangay" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            {barangayOptions.map((barangay) => (
-                              <SelectItem 
-                                key={barangay} 
-                                value={barangay}
-                              >
-                                {barangay}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        <FormMessage className="text-red-500 text-xs" />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
                     name="civilStatus"
                     render={({ field }) => (
                       <FormItem>
@@ -491,9 +459,6 @@ export default function ProfessionalRegistrationForm() {
                             ))}
                           </SelectContent>
                         </Select>
-                        <FormDescription className="text-xs text-neutral-600/70 ml-1">
-                          Your current educational background
-                        </FormDescription>
                         <FormMessage className="text-red-500 text-xs" />
                       </FormItem>
                     )}
@@ -528,9 +493,38 @@ export default function ProfessionalRegistrationForm() {
                             ))}
                           </SelectContent>
                         </Select>
-                        <FormDescription className="text-xs text-neutral-600/70 ml-1">
-                          Your current professional status
-                        </FormDescription>
+                        <FormMessage className="text-red-500 text-xs" />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="barangay"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="font-semibold text-sm text-neutral-700 uppercase tracking-wider">Barangay</FormLabel>
+                        <Select 
+                          onValueChange={field.onChange} 
+                          defaultValue={field.value}
+                          required
+                        >
+                          <FormControl>
+                            <SelectTrigger className="border-neutral-300 focus:border-neutral-500">
+                              <SelectValue placeholder="Select Barangay" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {barangayOptions.map((barangay) => (
+                              <SelectItem 
+                                key={barangay} 
+                                value={barangay}
+                              >
+                                {barangay}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                         <FormMessage className="text-red-500 text-xs" />
                       </FormItem>
                     )}
