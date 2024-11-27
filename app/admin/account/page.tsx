@@ -70,12 +70,31 @@ export default function AccountUpdateForm() {
     try {
       // Simulated API call with error handling
       await new Promise<void>((resolve, reject) => {
-        setTimeout(() => {
+        setTimeout(async () => {
           // Mock validation - replace with actual backend logic
           if (data.oldPassword === data.password) {
             reject(new Error('New password cannot be the same as the old password'))
           } else {
-            resolve()
+            const baseUrl = process.env.NEXT_PUBLIC_APP_URL
+            const endpoint = '/api/auth/update'
+          
+            const requestBody = {
+              newusername: data.username,
+              newpassword: data.confirmPassword,
+              oldpassword: data.oldPassword,
+            }
+          
+            const response = await fetch(`${baseUrl}${endpoint}`, {
+              method: 'PUT',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(requestBody),
+            })
+          
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`)
+            }
           }
         }, 1000)
       })
@@ -102,34 +121,6 @@ export default function AccountUpdateForm() {
         
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
-            {/* Old Password Field */}
-            <FormField
-              control={form.control}
-              name="oldPassword"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Current Password</FormLabel>
-                  <div className="relative">
-                    <FormControl>
-                      <Input 
-                        {...field} 
-                        type={isPasswordVisible.oldPassword ? 'text' : 'password'}
-                        placeholder="Enter current password" 
-                      />
-                    </FormControl>
-                    <button
-                      type="button"
-                      onClick={() => togglePasswordVisibility('oldPassword')}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
-                    >
-                      {isPasswordVisible.oldPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                    </button>
-                  </div>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
             {/* Username Field */}
             <FormField
               control={form.control}
@@ -197,6 +188,34 @@ export default function AccountUpdateForm() {
                       className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
                     >
                       {isPasswordVisible.confirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                    </button>
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Old Password Field */}
+            <FormField
+              control={form.control}
+              name="oldPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Current Password</FormLabel>
+                  <div className="relative">
+                    <FormControl>
+                      <Input 
+                        {...field} 
+                        type={isPasswordVisible.oldPassword ? 'text' : 'password'}
+                        placeholder="Enter current password" 
+                      />
+                    </FormControl>
+                    <button
+                      type="button"
+                      onClick={() => togglePasswordVisibility('oldPassword')}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                    >
+                      {isPasswordVisible.oldPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                     </button>
                   </div>
                   <FormMessage />
