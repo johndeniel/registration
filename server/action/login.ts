@@ -1,6 +1,6 @@
 'use server'
 
-import { AuthFormValue } from '@/components/user-auth-form'
+import { AuthFormValue } from '@/app/login/page'
 import { cookies } from 'next/headers'
 
 interface LoginResponse {
