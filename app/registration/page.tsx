@@ -4,6 +4,8 @@ import React, { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
+import { useRouter } from 'next/navigation'
+import Confetti from 'react-confetti'
 import { 
   barangayOptions, 
   sexOptions, 
@@ -141,6 +143,7 @@ const registrationSchema = z.object({
 })
 
 export default function ProfessionalRegistrationForm() {
+  const router = useRouter()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submissionStatus, setSubmissionStatus] = useState<'idle' | 'success' | 'error'>('idle')
 
@@ -168,6 +171,13 @@ export default function ProfessionalRegistrationForm() {
     }
   })
 
+  function formatDate(date: Date): string {
+    const year = date.getFullYear()
+    const month = (date.getMonth() + 1).toString().padStart(2, '0')
+    const day = date.getDate().toString().padStart(2, '0')
+    return `${year}-${month}-${day}` // Return in YYYY-MM-DD format
+  }
+
   async function onSubmit(values: z.infer<typeof registrationSchema>) {
     setIsSubmitting(true)
     setSubmissionStatus('idle')
@@ -176,11 +186,13 @@ export default function ProfessionalRegistrationForm() {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 2000))
       
-      // Real submission would happen here
-      console.log('Submitted Registration:', values)
+      // Log the date in mm/dd/yyyy format
+      console.log('Submitted Registration:', {
+        ...values,
+        dateOfBirth: formatDate(values.dateOfBirth)
+      })
       
       setSubmissionStatus('success')
-      form.reset()
     } catch (error) {
       console.error('Submission Error:', error)
       setSubmissionStatus('error')
@@ -213,6 +225,14 @@ export default function ProfessionalRegistrationForm() {
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-neutral-100 p-4">
+      {submissionStatus === 'success' && (
+        <Confetti
+          width={window.innerWidth}
+          height={window.innerHeight}
+          recycle={false}
+          numberOfPieces={500}
+        />
+      )}
       <div className="w-full max-w-6xl mx-auto bg-white shadow-xl rounded-2xl overflow-hidden">
         <div className="p-12">
           <h2 className="text-4xl font-bold text-center mb-12 text-neutral-800 tracking-tight">
@@ -643,16 +663,28 @@ export default function ProfessionalRegistrationForm() {
                 />
               </div>
 
-              <Button 
-                type="submit" 
-                className="w-full mt-8 bg-neutral-800 text-white hover:bg-neutral-700 
-                  transition-colors duration-300 uppercase tracking-wider 
-                  font-bold py-3 rounded-xl shadow-md hover:shadow-lg 
-                  disabled:opacity-50 disabled:cursor-not-allowed"
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? 'Processing...' : 'Submit Registration'}
-              </Button>
+              {submissionStatus === 'success' ? (
+                <Button 
+                  type="button" 
+                  onClick={() => router.push('/')}
+                  className="w-full mt-8 bg-green-600 text-white hover:bg-green-700 
+                    transition-colors duration-300 uppercase tracking-wider 
+                    font-bold py-3 rounded-xl shadow-md hover:shadow-lg"
+                >
+                  Finish
+                </Button>
+              ) : (
+                <Button 
+                  type="submit" 
+                  className="w-full mt-8 bg-neutral-800 text-white hover:bg-neutral-700 
+                    transition-colors duration-300 uppercase tracking-wider 
+                    font-bold py-3 rounded-xl shadow-md hover:shadow-lg 
+                    disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? 'Processing...' : 'Submit Registration'}
+                </Button>
+              )}
             </form>
           </Form>
         </div>
