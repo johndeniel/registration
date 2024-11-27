@@ -130,28 +130,12 @@ export default function AdminPage() {
                 >
                   <DropdownMenuLabel className="text-gray-600">My Settings</DropdownMenuLabel>
                   <DropdownMenuSeparator className="bg-gray-200" />
-                  <Link href="/activity-logs" className="w-full">
+                  <Link href="/admin/account" className="w-full">
                     <DropdownMenuItem 
                       className="hover:bg-gray-100 focus:bg-gray-200 
                         text-black hover:text-gray-800 cursor-pointer"
                     >
-                      Activity Logs
-                    </DropdownMenuItem>
-                  </Link>
-                  <Link href="/profile-account" className="w-full">
-                    <DropdownMenuItem 
-                      className="hover:bg-gray-100 focus:bg-gray-200 
-                        text-black hover:text-gray-800 cursor-pointer"
-                    >
-                      Profile Account
-                    </DropdownMenuItem>
-                  </Link>
-                  <Link href="/legal-privacy" className="w-full">
-                    <DropdownMenuItem 
-                      className="hover:bg-gray-100 focus:bg-gray-200 
-                        text-black hover:text-gray-800 cursor-pointer"
-                    >
-                      Legal & Privacy
+                      Account
                     </DropdownMenuItem>
                   </Link>
                   <DropdownMenuSeparator className="bg-gray-200" />
