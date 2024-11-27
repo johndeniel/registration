@@ -1,12 +1,16 @@
 interface PopulationTypedef {
     id: number
-    username: string
-    password: string
+    name: string
+    sex: string
+    age: string 
+    occupation: string
+    status: string
+    applicationtype: string
   }
   
-  export async function fetchTest(): Promise<PopulationTypedef[]> {
+  export async function fetchRecord(): Promise<PopulationTypedef[]> {
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL
-    const endpoint = '/api/auth/test'
+    const endpoint = '/api/record'
   
     try {
       const response = await fetch(`${baseUrl}${endpoint}`)
