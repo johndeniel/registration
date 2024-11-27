@@ -18,7 +18,7 @@ import { Eye, EyeOff } from 'lucide-react'
 
 // Enhanced password validation
 const passwordValidation = z.string()
-  .min(8, 'Password must be at least 8 characters')
+  .min(6, 'Password must be at least 6 characters')
   .max(50, 'Password cannot exceed 50 characters')
   .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
   .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
@@ -68,36 +68,28 @@ export default function AccountUpdateForm() {
 
   const onSubmit = async (data: AccountFormValues) => {
     try {
-      // Simulated API call with error handling
-      await new Promise<void>((resolve, reject) => {
-        setTimeout(async () => {
-          // Mock validation - replace with actual backend logic
-          if (data.oldPassword === data.password) {
-            reject(new Error('New password cannot be the same as the old password'))
-          } else {
-            const baseUrl = process.env.NEXT_PUBLIC_APP_URL
-            const endpoint = '/api/auth/update'
-          
-            const requestBody = {
-              newusername: data.username,
-              newpassword: data.confirmPassword,
-              oldpassword: data.oldPassword,
-            }
-          
-            const response = await fetch(`${baseUrl}${endpoint}`, {
-              method: 'PUT',
-              headers: {
-                  'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(requestBody),
-            })
-          
-            if (!response.ok) {
-              throw new Error(`HTTP error! status: ${response.status}`)
-            }
-          }
-        }, 1000)
+      const baseUrl = process.env.NEXT_PUBLIC_APP_URL
+      const endpoint = '/api/auth/update'
+    
+      const requestBody = {
+        newusername: data.username,
+        newpassword: data.confirmPassword,
+        oldpassword: data.oldPassword,
+      }
+    
+      const response = await fetch(`${baseUrl}${endpoint}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestBody),
       })
+    
+      const responseData = await response.json()
+
+      if (!response.ok) {
+        throw new Error(responseData.error || 'An unexpected error occurred')
+      }
 
       setSuccessMessage('Account updated successfully!')
       form.reset() // Clear form after successful submission
@@ -121,7 +113,6 @@ export default function AccountUpdateForm() {
         
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
-            {/* Username Field */}
             <FormField
               control={form.control}
               name="username"
@@ -139,7 +130,6 @@ export default function AccountUpdateForm() {
               )}
             />
 
-            {/* New Password Field */}
             <FormField
               control={form.control}
               name="password"
@@ -167,7 +157,6 @@ export default function AccountUpdateForm() {
               )}
             />
 
-            {/* Confirm New Password Field */}
             <FormField
               control={form.control}
               name="confirmPassword"
@@ -195,7 +184,6 @@ export default function AccountUpdateForm() {
               )}
             />
 
-            {/* Old Password Field */}
             <FormField
               control={form.control}
               name="oldPassword"
@@ -223,14 +211,12 @@ export default function AccountUpdateForm() {
               )}
             />
 
-            {/* Global Form Error */}
             {form.formState.errors.root && (
               <p className="text-red-500 text-center">
                 {form.formState.errors.root.message}
               </p>
             )}
 
-            {/* Submit Button */}
             <Button 
               type="submit" 
               className="w-full bg-blue-600 hover:bg-blue-700 text-white transition-colors duration-300"
