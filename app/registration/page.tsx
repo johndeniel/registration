@@ -171,13 +171,6 @@ export default function ProfessionalRegistrationForm() {
     }
   })
 
-  function formatDate(date: Date): string {
-    const year = date.getFullYear()
-    const month = (date.getMonth() + 1).toString().padStart(2, '0')
-    const day = date.getDate().toString().padStart(2, '0')
-    return `${year}-${month}-${day}` // Return in YYYY-MM-DD format
-  }
-
   async function onSubmit(values: z.infer<typeof registrationSchema>) {
     setIsSubmitting(true)
     setSubmissionStatus('idle')
@@ -185,14 +178,58 @@ export default function ProfessionalRegistrationForm() {
     try {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 2000))
-      
-      // Log the date in mm/dd/yyyy format
-      console.log('Submitted Registration:', {
-        ...values,
-        dateOfBirth: formatDate(values.dateOfBirth)
-      })
-      
-      setSubmissionStatus('success')
+      const baseUrl = process.env.NEXT_PUBLIC_APP_URL
+      const endpoint = '/api/registration'
+    
+      function formatDate(date: Date): string {
+        const year = date.getFullYear()
+        const month = (date.getMonth() + 1).toString().padStart(2, '0')
+        const day = date.getDate().toString().padStart(2, '0')
+        return `${year}-${month}-${day}` 
+      }
+    
+      try {
+        const requestBody = {
+          applicationtype: values.applicationType,
+          firstname: values.firstName,
+          middlename: values.middleName || 'NULL',
+          lastname: values.lastName,
+          sex: values.sex,
+          dateofbirth: formatDate(values.dateOfBirth),
+          placeofbirth: values.placeOfBirth,
+          civilstatus: values.civilStatus,
+          education: values.educationalAttainment,
+          occupation: values.occupation,
+          barangay: values.barangay,
+          name: values.emergencyContact?.name,
+          relationship: values.emergencyContact?.relationship,
+          contact: values.emergencyContact?.phoneNumber,
+          health: values.healthCondition || 'NULL',
+        }
+    
+        const response = await fetch(`${baseUrl}${endpoint}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(requestBody),
+        })
+    
+        if (!response.ok) {
+          const errorText = await response.text()
+          console.error('Response error:', response.status, errorText)
+          throw new Error(
+            `HTTP error! status: ${response.status}, message: ${errorText}`,
+          )
+        }
+    
+        const result = await response.json()
+        setSubmissionStatus('success')
+        return result
+      } catch (error) {
+        console.error('Error posting account data:', error)
+        throw error
+      }
     } catch (error) {
       console.error('Submission Error:', error)
       setSubmissionStatus('error')

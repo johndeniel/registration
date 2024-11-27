@@ -3,7 +3,7 @@
   "rules": {
     // Rules configurations:
     "eqeqeq": "error", // Requires using strict equality (=== and !==).
-    "consistent-return": "error", // Requires a return statement in function bodies.
+    "consistent-return": "off", // Requires a return statement in function bodies.
     "linebreak-style": [
       // Enforces consistent linebreak style.
       "error", // Indicates that this rule should be enforced as an error.

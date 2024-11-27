@@ -1,5 +1,6 @@
 CREATE TABLE senior (
     id SERIAL PRIMARY KEY, -- Auto-incrementing primary key
+    applicationtype VARCHAR(255), -- Application Type
     firstname VARCHAR(255), -- First name
     middlename VARCHAR(255), -- Middle name
     lastname VARCHAR(255), -- Last name
