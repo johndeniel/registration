@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card'
-import { ArrowRight, Phone, Mail, MapPin, Calendar, Heart, Bus, Book, Tag, Users } from 'lucide-react'
+import { ArrowRight, Calendar, Heart, Bus, Book, Tag, Users } from 'lucide-react'
 
 export default function Home() {
   return (
@@ -87,36 +87,9 @@ export default function Home() {
           </div>
         </section>
       </main>
-
-      <footer className="bg-gradient-to-br from-primary/90 to-primary text-white py-16">
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-3 gap-12">
-            {/* Contact Information */}
-            <div>
-              <h4 className="text-2xl font-bold mb-6 tracking-tight">Contact Us</h4>
-              <div className="space-y-4">
-                <p className="flex items-center">
-                  <Phone className="mr-4 h-6 w-6 text-white/80" />
-                  <span className="text-lg">(800) SENIORS-CARE</span>
-                </p>
-                <p className="flex items-center">
-                  <Mail className="mr-4 h-6 w-6 text-white/80" />
-                  <span className="text-lg">support@seniornetwork.org</span>
-                </p>
-                <p className="flex items-center">
-                  <MapPin className="mr-4 h-6 w-6 text-white/80" />
-                  <span className="text-lg">Community Plaza, Nationwide</span>
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Copyright */}
-          <div className="mt-12 pt-8 border-t border-white/20 text-center">
-            <p className="text-white/80">
-              &copy; 2024 Senior Citizens Support Network. All Rights Reserved.
-            </p>
-          </div>
+      <footer className="bg-primary text-white py-8">
+        <div className="container mx-auto px-4 text-center">
+          <p>© 2024 Senior Citizens Affairs Registration</p>
         </div>
       </footer>
     </div>
