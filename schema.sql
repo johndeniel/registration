@@ -24,4 +24,4 @@ CREATE TABLE auth (
 );
 
 INSERT INTO auth (username, password) 
-VALUES ('user1', '$2b$10$j1BFG4hR07qGvKs6cc4jE.kJl5Ko3eRhBl3pbMCwIH8DJiRSFYYgW');
+VALUES ('user123', '$2b$10$j1BFG4hR07qGvKs6cc4jE.kJl5Ko3eRhBl3pbMCwIH8DJiRSFYYgW');
